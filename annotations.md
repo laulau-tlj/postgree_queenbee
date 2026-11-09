@@ -68,3 +68,27 @@ Trois informations sensibles de Queen Bee et ce qu'un attaquant pourrait en fair
 1. **La position GPS des ruches :** Un voleur peut localiser précisément les ruches isolées sur le terrain pour aller les dérober ou voler le miel.
 2. **Le numéro de téléphone des apicultrices :** Un fraudeur peut revendre ces données personnelles ou mener des campagnes d’hameçonnage (phishing par SMS/appel) pour usurper l'identité de la coopérative.
 3. **Les identifiants de connexion (`login` / mot de passe) et les mesures des capteurs :** Un attaquant peut se connecter à la place d’un coordinateur pour valider de fausses récoltes, ou injecter de fausses mesures (poids, température) pour masquer un vol ou déclencher de fausses alertes.
+
+---
+
+## Partie C · Analyse de sensibilité et menaces (STRIDE)
+
+| Entité | Sensibilité | Qui lit | Qui modifie | Menace STRIDE et ce que gagne l’attaquant |
+| :--- | :--- | :--- | :--- | :--- |
+| **RUCHE** | confidentielle | apicultrice, coordinateur, gestionnaire, administrateur | coordinateur, administrateur | **I** (Information Disclosure) : connaître la position GPS exacte pour aller voler la ruche sur le terrain. |
+| **APICULTRICE** | confidentielle | apicultrice (ses infos), coordinateur, gestionnaire, administrateur | administrateur | **I** (Information Disclosure) : récupérer les numéros de téléphone pour mener des campagnes d’hameçonnage (phishing) ou de démarchage. |
+| **UTILISATEUR** | critique | administrateur (et chaque utilisateur son profil) | administrateur | **S** (Spoofing) / **E** (Elevation of Privilege) : usurper l’identité d’un coordinateur ou s’octroyer les droits administrateur. |
+| **MESURE** | interne | apicultrice, coordinateur, gestionnaire, administrateur | capteurs (système) | **T** (Tampering) : rejouer une ancienne mesure de poids pour masquer le vol de miel ou déclencher de fausses alertes. |
+| **RECOLTE** | confidentielle | apicultrice (les siennes), coordinateur, gestionnaire, administrateur | apicultrice (déclare), coordinateur (valide) | **R** (Repudiation) : valider une récolte frauduleuse sans qu’on sache par quel coordinateur ni quand elle a été approuvée. |
+| **INSPECTION** | interne | apicultrice, coordinateur, gestionnaire, administrateur | apicultrice, coordinateur | **D** (Denial of Service) / **R** : effacer l’historique des actions et des inspections pour supprimer les preuves d’une négligence ou d’une fraude. |
+| **ALERTE** | interne | apicultrice, coordinateur, gestionnaire, administrateur | système, coordinateur | **T** (Tampering) / **D** : fermer ou supprimer une alerte de vol en cours pour empêcher l’intervention sur le site. |
+| **SITE** | publique | tous (apicultrice, coordinateur, gestionnaire, administrateur) | administrateur | **T** (Tampering) : modifier les informations d’un site rucher pour fausser les statistiques régionales. |
+| **COOPERATIVE** | publique | tous (apicultrice, coordinateur, gestionnaire, administrateur) | gestionnaire, administrateur | **E** (Elevation of Privilege) : rattacher frauduleusement un compte à une coopérative pour accéder aux données de ses membres. |
+
+---
+
+### Testez-vous · Lab 1 (Réponses)
+1. **Date d’adhésion :** Elle appartient au lien (**association `ADHÈRE`**) entre l’apicultrice et la coopérative (car une apicultrice peut adhérer à plusieurs coopératives à des dates différentes).
+2. **Nom comme identifiant :** C'est un mauvais identifiant car deux personnes peuvent porter exactement le même nom (homonymes, comme les deux « Aminata Diop » du jeu d'essai).
+3. **Rejeu d’une mesure de poids :** Correspond à la lettre **T** (*Tampering* / altération des données).
+4. **Cardinalité « Une ruche appartient à une seule apicultrice » :** Cardinalité **`1,1`**, placée **du côté de l'entité `RUCHE`** (car la phrase parle d'une ruche).
