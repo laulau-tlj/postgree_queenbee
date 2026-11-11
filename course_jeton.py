@@ -4,7 +4,7 @@ import psycopg
 
 """ dans ce fichier, on simule une attaque sur un jeton pour voir si la base de données est vulnérable à une condition de course """
 """ Ce script prouve qu'un jeton à usage unique peut être utilisé deux fois si le code vérifie son état avant de le modifier. Il simule deux requêtes simultanées envoyées par un attaquant au même millième de seconde. """
-CODE_JETON = "RT-f.sow-10"
+CODE_JETON = "RT-f.sow-25" # Jeton à usage unique (valeur aléatoire)
 barriere = threading.Barrier(2)
 
 """ Fonction pour simuler une attaque sur un jeton """
