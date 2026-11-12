@@ -7,11 +7,11 @@ ALTER TABLE mesure
 
 ALTER TABLE utilisateur
   ADD CONSTRAINT utilisateur_role_valide
-  CHECK (role IN ('apicultrice', 'coordinateur', 'gestionnaire', 'admin'));
+  CHECK (role IN ('apicultrice', 'coordinateur', 'gestionnaire', 'administrateur'));
 
 ALTER TABLE alerte
   ADD CONSTRAINT alerte_statut_valide
-  CHECK (statut IN ('ouverte', 'en_cours', 'traitee'));
+  CHECK (statut IN ('ouverte', 'close'));
 
 ALTER TABLE recolte
   ADD CONSTRAINT recolte_statut_valide

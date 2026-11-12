@@ -41,3 +41,19 @@ CREATE POLICY recolte_apicultrice_isolement ON recolte
 
 -- Autoriser la lecture des colonnes d'identification pour évaluer les politiques RLS
 GRANT SELECT (id, login, apicultrice_id) ON utilisateur TO qb_apicultrice;
+
+-- 5. Aligner les logins applicatifs avec les rôles de connexion (constat R1)
+-- les rôles créés dans roles.sql doivent trouver leur ligne dans utilisateur
+UPDATE utilisateur SET login = 'f.ba'
+WHERE login = 'f.sow';   -- Fatou, propriétaire de SN-KOLD-012
+
+UPDATE utilisateur SET login = 'awa.diop'
+WHERE apicultrice_id = (SELECT id FROM apicultrice WHERE nom = 'Awa Diop');
+
+INSERT INTO utilisateur (login, role, site_id)
+SELECT 'coord.sn', 'coordinateur', 'SN-KOLD'
+WHERE NOT EXISTS (SELECT 1 FROM utilisateur WHERE login = 'coord.sn');
+
+INSERT INTO utilisateur (login, role)
+SELECT 'admin.beeafrica', 'administrateur'
+WHERE NOT EXISTS (SELECT 1 FROM utilisateur WHERE login = 'admin.beeafrica');

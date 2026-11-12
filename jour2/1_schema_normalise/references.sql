@@ -1,16 +1,16 @@
 -- references.sql : que devient une ligne liée quand on supprime la ligne référencée
 -- (les noms des contraintes sont ceux de notre schéma du jour 1, vérifiés avec pg_constraint)
 
--- adhesion : le lien n'a pas de valeur tout seul, il part avec l'apicultrice ou le groupement
+-- adhesion : le lien n'a pas de valeur tout seul, il part avec l'apicultrice ou la coopérative
 ALTER TABLE adhesion
-  DROP CONSTRAINT adhesion_apicultrice_id_fkey,
-  ADD CONSTRAINT adhesion_apicultrice_id_fkey FOREIGN KEY (apicultrice_id)
+  DROP CONSTRAINT adhesion_apicultrice_fk,
+  ADD CONSTRAINT adhesion_apicultrice_fk FOREIGN KEY (apicultrice_id)
       REFERENCES apicultrice (id) ON DELETE CASCADE;
 
 ALTER TABLE adhesion
-  DROP CONSTRAINT adhesion_groupement_id_fkey,
-  ADD CONSTRAINT adhesion_groupement_id_fkey FOREIGN KEY (groupement_id)
-      REFERENCES groupement (id) ON DELETE CASCADE;
+  DROP CONSTRAINT adhesion_cooperative_fk,
+  ADD CONSTRAINT adhesion_cooperative_fk FOREIGN KEY (cooperative_id)
+      REFERENCES cooperative (id) ON DELETE CASCADE;
 
 -- mesure : ce sont des preuves (poids, vol), on ne doit pas pouvoir les effacer en supprimant une ruche
 ALTER TABLE mesure

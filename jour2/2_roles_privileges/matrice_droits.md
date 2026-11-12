@@ -15,7 +15,7 @@ Remplie avant d'écrire les GRANT de roles.sql.
 ## Pourquoi ces choix
 
 - Pas d'UPDATE sur `recolte` pour le coordinateur : il pourrait changer les volumes. La fonction ne touche qu'au statut.
-- L'apicultrice écrit par `v_mes_recoltes` et seulement sur `ruche_id`, `date_recolte`, `volume_kg` : elle ne peut pas se mettre le statut à `validee`.
+- L'apicultrice écrit par `v_mes_recoltes` et seulement sur `ruche_id`, `date_recolte`, `quantite_kg` : elle ne peut pas se mettre le statut à `validee`.
 - Le gestionnaire ne voit que des chiffres agrégés (synthèse, export pseudonymisé).
 - L'admin gère les comptes mais ne peut rien supprimer, et il lit le journal sans pouvoir le modifier.
 

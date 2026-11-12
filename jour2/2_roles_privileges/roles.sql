@@ -58,7 +58,7 @@ SELECT id, login, role FROM utilisateur WHERE login = qui();
 
 -- apicultrice
 CREATE VIEW v_mes_ruches AS
-SELECT r.id, r.code, r.site_id, r.latitude, r.longitude, r.date_installation
+SELECT r.id, r.nom, r.site_id, r.latitude, r.longitude, r.date_installation
 FROM ruche r
 JOIN utilisateur u ON u.apicultrice_id = r.apicultrice_id
 WHERE u.login = qui();
@@ -69,22 +69,22 @@ FROM mesure m
 WHERE m.ruche_id IN (SELECT id FROM v_mes_ruches);
 
 CREATE VIEW v_mes_recoltes AS
-SELECT rc.id, rc.ruche_id, rc.date_recolte, rc.volume_kg, rc.statut
+SELECT rc.id, rc.ruche_id, rc.date_recolte, rc.quantite_kg, rc.statut
 FROM recolte rc
 WHERE rc.ruche_id IN (SELECT id FROM v_mes_ruches)
 WITH CHECK OPTION;
 
 -- coordinateur : son site seulement
 CREATE VIEW v_ruches_site AS
-SELECT r.id, r.code, r.site_id, a.nom AS apicultrice, a.telephone
+SELECT r.id, r.nom, r.site_id, a.nom AS apicultrice, a.telephone
 FROM ruche r
 JOIN apicultrice a ON a.id = r.apicultrice_id
 JOIN utilisateur u ON u.site_id = r.site_id
 WHERE u.login = qui();
 
 CREATE VIEW v_recoltes_site AS
-SELECT rc.id, rc.ruche_id, rc.date_recolte, rc.volume_kg, rc.statut,
-       rc.validee_par, rc.validee_le
+SELECT rc.id, rc.ruche_id, rc.date_recolte, rc.quantite_kg, rc.statut,
+       rc.validee_par, rc.date_validation
 FROM recolte rc
 JOIN ruche r ON r.id = rc.ruche_id
 JOIN utilisateur u ON u.site_id = r.site_id
@@ -105,7 +105,7 @@ BEGIN
   END IF;
 
   UPDATE recolte rc
-  SET statut = 'validee', validee_par = v_coord.id, validee_le = now()
+  SET statut = 'validee', validee_par = v_coord.id, date_validation = now()
   FROM ruche r
   WHERE rc.id = p_recolte
     AND rc.statut = 'declaree'
@@ -127,7 +127,7 @@ GRANT SELECT ON v_moi
   TO qb_apicultrice, qb_coordinateur, qb_gestionnaire, qb_admin;
 
 GRANT SELECT ON v_mes_ruches, v_mes_mesures, v_mes_recoltes TO qb_apicultrice;
-GRANT INSERT (ruche_id, date_recolte, volume_kg) ON v_mes_recoltes TO qb_apicultrice;
+GRANT INSERT (ruche_id, date_recolte, quantite_kg) ON v_mes_recoltes TO qb_apicultrice;
 
 GRANT SELECT ON v_ruches_site, v_recoltes_site TO qb_coordinateur;
 
